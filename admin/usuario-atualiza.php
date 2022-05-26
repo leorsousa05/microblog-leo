@@ -1,6 +1,19 @@
 <?php 
 require "../inc/cabecalho-admin.php";
+require "../inc/funcoes-usuarios.php";
+$id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
 
+$usuario = lerUmUsuario($conexao, $id);
+
+if(isset($_POST['atualizar'])) {
+  $nome = filter_input(INPUT_POST, "nome", FILTER_SANITIZE_SPECIAL_CHARS);;
+  $email = filter_input(INPUT_POST, "email", FILTER_SANITIZE_SPECIAL_CHARS);;
+  $tipo = filter_input(INPUT_POST, "tipo", FILTER_SANITIZE_SPECIAL_CHARS);;
+  $senha = codificaSenha($_POST['senha']);
+  
+  atualizarUsuario($conexao, $nome, $email, $senha, $tipo, $id);
+  header("location:usuarios.php");
+};
 
 ?>
        
@@ -12,12 +25,12 @@ require "../inc/cabecalho-admin.php";
 
       <div class="form-group">
         <label for="nome">Nome:</label>
-        <input class="form-control" required type="text" id="nome" name="nome">
+        <input class="form-control" value="<?=$usuario['nome']?>" required type="text" id="nome" name="nome">
       </div>
 
       <div class="form-group">
         <label for="email">E-mail:</label>
-        <input class="form-control" required type="email" id="email" name="email">
+        <input class="form-control" value="<?=$usuario['email']?>" required type="email" id="email" name="email">
       </div>
 
       <div class="form-group">
@@ -29,8 +42,8 @@ require "../inc/cabecalho-admin.php";
         <label for="tipo">Tipo:</label>
         <select class="custom-select" name="tipo" id="tipo" required>
           <option value=""></option>                  
-          <option value="editor">Editor</option>     
-          <option	value="admin">Administrador</option>
+          <option value="editor" <?php if($usuario['tipo'] == 'editor') { echo 'selected'; }; ?>>Editor</option>     
+          <option	value="admin" <?php if($usuario['tipo'] == 'admin') { echo 'selected'; }; ?>>Administrador</option>
         </select>
       </div>
       
