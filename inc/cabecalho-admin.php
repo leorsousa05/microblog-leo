@@ -1,5 +1,7 @@
 <?php
 // Guardando o nome da página atual
+require "funcoes-sessao.php";
+verificaAcesso();
 $pagina = basename($_SERVER['PHP_SELF']);
 ?>
 <!doctype html>

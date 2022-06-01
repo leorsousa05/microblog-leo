@@ -9,7 +9,14 @@ if(isset($_POST['atualizar'])) {
   $nome = filter_input(INPUT_POST, "nome", FILTER_SANITIZE_SPECIAL_CHARS);;
   $email = filter_input(INPUT_POST, "email", FILTER_SANITIZE_SPECIAL_CHARS);;
   $tipo = filter_input(INPUT_POST, "tipo", FILTER_SANITIZE_SPECIAL_CHARS);;
-  $senha = codificaSenha($_POST['senha']);
+
+
+  if( empty($_POST['senha']) ) {
+    $senha = $usuario['senha'];
+    
+  } else {
+    $senha = verificaSenha($_POST['senha'], $usuario['senha']);
+  };
   
   atualizarUsuario($conexao, $nome, $email, $senha, $tipo, $id);
   header("location:usuarios.php");
