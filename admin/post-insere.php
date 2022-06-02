@@ -1,5 +1,18 @@
 <?php 
 require "../inc/cabecalho-admin.php"; 
+require "../inc/funcoes-posts.php";
+
+if(isset($_POST['inserir'])) {
+  $titulo = filter_input(INPUT_POST, 'titulo', FILTER_SANITIZE_SPECIAL_CHARS);
+  $texto = filter_input(INPUT_POST, 'texto', FILTER_SANITIZE_SPECIAL_CHARS);
+  $resumo = filter_input(INPUT_POST, 'resumo', FILTER_SANITIZE_SPECIAL_CHARS);
+
+  $imagem = $_FILES['imagem'];
+  upload($imagem);
+  inserirPost($conexao, $titulo, $texto, $resumo, $imagem['name'], $_SESSION['id']);
+  header("location:posts.php");
+};
+
 
 ?>
        
@@ -7,7 +20,7 @@ require "../inc/cabecalho-admin.php";
     <article class="col-12 bg-white rounded shadow my-1 py-4">
       <h2 class="text-center">Inserir Post</h2>
 
-      <form  class="mx-auto w-75" action="" method="post" id="form-inserir" name="form-inserir">
+      <form enctype="multipart/form-data"  class="mx-auto w-75" action="" method="post" id="form-inserir" name="form-inserir">
 
         <div class="form-group">
           <label for="titulo">Título:</label>
@@ -18,6 +31,7 @@ require "../inc/cabecalho-admin.php";
           <label for="texto">Texto:</label>
           <textarea class="form-control" required name="texto" id="texto" cols="50" rows="10"></textarea>
         </div>
+
 
         <div class="form-group">
           <label for="resumo">Resumo (máximo de 300 caracteres):</label>

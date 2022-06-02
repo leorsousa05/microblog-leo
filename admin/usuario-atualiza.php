@@ -1,8 +1,8 @@
 <?php 
 require "../inc/cabecalho-admin.php";
 require "../inc/funcoes-usuarios.php";
+verificaAcessoAdmin();
 $id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
-
 $usuario = lerUmUsuario($conexao, $id);
 
 if(isset($_POST['atualizar'])) {

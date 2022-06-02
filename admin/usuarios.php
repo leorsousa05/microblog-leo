@@ -1,6 +1,7 @@
 <?php 
 require "../inc/cabecalho-admin.php"; 
 require "../inc/funcoes-usuarios.php";
+verificaAcessoAdmin();
 
 $users = lerUsuarios($conexao);
 
