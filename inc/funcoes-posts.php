@@ -85,9 +85,31 @@ function excluirPost(mysqli $conexao, int $idPost, int $idUsuarioLogado, string 
 /* Funções utilitárias */
 
 /* Usada em post-insere.php e post-atualiza.php */
-function upload(){
-    
-} // fim upload
+function upload(array $arquivo){
+    // Definindo os tipos de imagem aceitos
+    $tiposValidos = ["image/png", "image/jpeg", "image/gif", "image/svg+xml"];
+
+    // Verificando se o arquivo enviado NÃO É um dos aceitos
+    if( !in_array($arquivo['type'], $tiposValidos) ){
+        die("<script>alert('Formato é inválido!'); history.back();</script>");
+    }
+
+    // Acessando apenas o nome do arquivo
+    $nome = $arquivo['name'];  // $_FILES['arquivo']['name'];
+
+    // Acessando dados de acesso temporário ao arquivo
+    $temporario = $arquivo['tmp_name'];
+
+    // Pasta de destino do arquivo que está sendo enviado
+    $destino = "../imagens/$nome";
+
+    /* Se o processo de envio temporario para destino for
+    feito com sucesso, então a função retorna verdadeiro (indicando
+    o sucesso no processo) */
+    if( move_uploaded_file($temporario, $destino) ){
+        return true;
+    }
+} // fim uploa
 
 
 
@@ -102,7 +124,7 @@ function formataData(string $data):string {
 
 /* Usada em index.php */
 function lerTodosOsPosts(mysqli $conexao):array {
-    $sql = "SELECT titulo, resumo, imagem FROM posts";
+    $sql = "SELECT id, titulo, resumo, imagem FROM posts";
     
     $resultado = mysqli_query($conexao, $sql) or die(mysqli_error($conexao));
     $posts = [];
@@ -115,8 +137,8 @@ function lerTodosOsPosts(mysqli $conexao):array {
 
 
 /* Usada em post-detalhe.php */
-function lerDetalhes(mysqli $conexao):array {    
-    $sql = "";
+function lerDetalhes(mysqli $conexao, int $idPost):array {    
+    $sql = "SELECT posts.id, posts.titulo, posts.texto, posts.imagem, posts.data, usuarios.nome AS autor FROM posts INNER JOIN usuarios WHERE posts.id = $idPost";
 
     $resultado = mysqli_query($conexao, $sql) or die(mysqli_error($conexao));
     return mysqli_fetch_assoc($resultado); 
