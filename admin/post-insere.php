@@ -8,6 +8,9 @@ if(isset($_POST['inserir'])) {
   $resumo = filter_input(INPUT_POST, 'resumo', FILTER_SANITIZE_SPECIAL_CHARS);
 
   $imagem = $_FILES['imagem'];
+
+  $imagem = $_FILES['imagem'];
+
   upload($imagem);
   inserirPost($conexao, $titulo, $texto, $resumo, $imagem['name'], $_SESSION['id']);
   header("location:posts.php");
